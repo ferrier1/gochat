@@ -28,12 +28,12 @@ type Message struct {
 
 func main() {
   // fileserver
-  fs := http.Fileserver(http.Dir("../public"))
+  fs := http.FileServer(http.Dir("../public"))
   http.Handle("/", fs)
   // websocket
   http.HandleFunc("/ws", handleConnections)
   // listen for incoming messages
-  go HandleMessages()
+  go handleMessages()
   // start server on localhost:8000 with logging
   log.Println("http server started on :8000")
   err := http.ListenAndServe(":8000", nil)
