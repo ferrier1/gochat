@@ -43,7 +43,7 @@ func main() {
 }
 
 
-func handleCOnnections(w http.ResponseWriter, r *http.Request) {
+func handleConnections(w http.ResponseWriter, r *http.Request) {
   // use upgrader on GET to make websocket
   ws, err := upgrader.Upgrade(w, r, nil)
   if err != nil {
@@ -51,4 +51,20 @@ func handleCOnnections(w http.ResponseWriter, r *http.Request) {
   }
   // close connection
   defer ws.Close()
+  // register client
+  clients[ws] = true
+  // infinite loop that waits for new message on websocket
+  for {
+    var msg Message
+    // read new message as JSON and map to Message object
+    err := ws.ReadJSON(&msg)
+    if err != nil {
+      log.Printf("errorL %v", err)
+      delete(clients, ws)
+      break
+    }
+    // send new message to broadcast channel
+    broadcast <- msg
+  }
+
 }
