@@ -41,3 +41,14 @@ func main() {
     log.Fatall("ListenAndServe: ", err)
   }
 }
+
+
+func handleCOnnections(w http.ResponseWriter, r *http.Request) {
+  // use upgrader on GET to make websocket
+  ws, err := upgrader.Upgrade(w, r, nil)
+  if err != nil {
+    log.Fatal(err)
+  }
+  // close connection
+  defer ws.Close()
+}
