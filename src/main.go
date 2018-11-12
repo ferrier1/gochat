@@ -68,3 +68,19 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
   }
 
 }
+
+
+func handleMessages() {
+  for {
+    msg := <-broadcast
+    // send to connected clients
+    for client := range clients {
+      err := client.WriteJSON(msg)
+      if err != nil {
+        log.Printf("error: %v", err)
+        client.Close()
+        delete(clients, client)
+      }
+    }
+  }
+}
