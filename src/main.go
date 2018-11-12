@@ -38,7 +38,7 @@ func main() {
   log.Println("http server started on :8000")
   err := http.ListenAndServe(":8000", nil)
   if err != nil {
-    log.Fatall("ListenAndServe: ", err)
+    log.Fatal("ListenAndServe: ", err)
   }
 }
 
